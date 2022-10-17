@@ -2,8 +2,9 @@
   "name": "final-project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.mjs",
   "scripts": {
+    "start": "nodemon server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "create-react-app": "^5.0.1",
-    "js-cookie": "^3.0.1"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "finnhub": "^1.2.16",
+    "js-cookie": "^3.0.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.20"
   }
 }

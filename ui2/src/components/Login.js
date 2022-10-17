@@ -33,7 +33,25 @@ export default function Login({setUsername}) {
                     setUsername(username)
                 })
         } else {
+            fetch('/login', {
+                method: 'POST',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify({
+                    'username': username,
+                    'password': password
+                })
+            })
+                .then(async response => {
+                    const hasJson = response.headers.get('content-type')?.includes('application/json')
+                    const data = hasJson ? await response.json() : null
 
+                    if (!response.ok) {
+                        let error = (data && data.error) || response.status
+                        return Promise.reject(error)
+                    }
+
+                    setUsername(username)
+                })
         }
     }
     const handleUsernameChange = (e) => {

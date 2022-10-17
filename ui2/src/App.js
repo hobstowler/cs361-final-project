@@ -10,7 +10,7 @@ import Search from "./components/Search";
 
 
 function App() {
-    const [username, setUsername] = useState('hobs')
+    const [username, setUsername] = useState('')
 
     useEffect(() => {
         let username = Cookies.get('username')
