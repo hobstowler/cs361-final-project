@@ -8,22 +8,20 @@ import Stories from "../components/Stories";
 export default function Detail({username}) {
     const [searchParams, setSearchParams] = useSearchParams()
     const [stock, setStock] = useState(searchParams.get('stock'))
-    const [stories, setStories] = useState([])
 
     useEffect(() => {
-        console.log('change detected')
         setStock(searchParams.get('stock'))
     }, [searchParams])
 
     return (
-        <div>
-            <div id='left'>
+        <div className='bodyWrap'>
+            <div className='left'>
                 <Watchlist username={username} />
                 <Portfolio username={username} />
             </div>
-            <div id='right'>
-                <Fundamentals />
-                <Stories />
+            <div className='right'>
+                <Fundamentals stock={stock} />
+                <Stories stock={stock} />
             </div>
         </div>
     )

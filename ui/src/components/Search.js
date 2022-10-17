@@ -15,11 +15,13 @@ export default function Search() {
     }
 
     return (
-        <div>
-            <form onSubmit={search}>
-                <input type='text' value={searchTerm} onChange={handleChange} />
-                <input type='submit' value='Search' />
-            </form>
+        <div className='searchWrap'>
+            <div className='search'>
+                <form onSubmit={search}>
+                    <input className='searchEntry' type='text' value={searchTerm} onChange={handleChange} />
+                    <input type='submit' value='Search by Symbol' />
+                </form>
+            </div>
         </div>
     )
 }

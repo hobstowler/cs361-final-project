@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Cookies from "js-cookie";
 
 export default function Login({setUsername}) {
     const [register, setRegister] = useState(false)
@@ -31,6 +32,7 @@ export default function Login({setUsername}) {
                     }
 
                     setUsername(username)
+                    Cookies.set('username', username)
                 })
         } else {
             fetch('/login', {
@@ -51,6 +53,7 @@ export default function Login({setUsername}) {
                     }
 
                     setUsername(username)
+                    Cookies.set('username', username)
                 })
         }
     }
@@ -65,7 +68,7 @@ export default function Login({setUsername}) {
     }
 
     return (
-        <div class='loginForm'>
+        <div className='loginForm'>
             <form onSubmit={handleSubmit}>
                 <input type="text" onChange={handleUsernameChange} value={username} />
                 <input type="password" onChange={handlePasswordChange} value={password} />

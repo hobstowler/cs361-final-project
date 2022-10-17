@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import Story from "./Story";
 
 export default function Stories({stock}) {
-    const [stories, setStories] = useState({})
+    const [stories, setStories] = useState([])
 
     useEffect(() => {
         getStories()
@@ -14,6 +14,7 @@ export default function Stories({stock}) {
         let mm = String(today.getMonth()).padStart(2, '0')
         let yyyy = today.getFullYear()
         let endDt = `${yyyy}-${mm}-${dd}`
+        console.log(endDt)
 
         let lastWeek = new Date()
         lastWeek.setDate(today.getDate() - 7)
@@ -21,8 +22,9 @@ export default function Stories({stock}) {
         mm = String(lastWeek.getMonth()).padStart(2, '0')
         yyyy = lastWeek.getFullYear()
         let startDt = `${yyyy}-${mm}-${dd}`
+        console.log(startDt)
 
-        fetch(`/news/${stock.stock}?start_dt=${startDt}&end_dt${endDt}`, {
+        fetch(`/news/${stock}?start_dt=${startDt}&end_dt=${endDt}`, {
             method: 'GET'
         })
             .then(async response => {
@@ -39,6 +41,8 @@ export default function Stories({stock}) {
 
     return (
         <div>
+            <h2>In the News...</h2>
+            {(stories.length === 0) ? `I couldn't find any news about this company in the last week. No news is good news, right?`: null}
             {stories.slice(0, 5).map((story) => <Story story={story} />)}
         </div>
     )

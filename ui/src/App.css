@@ -6,6 +6,7 @@
   display: block;
   background-color: cornflowerblue;
   padding: 20px;
+  border-radius: 10px;
 }
 
 .headerWrapper h1 {
@@ -15,12 +16,20 @@
 .login {
   width: 100%;
   height: 15px;
+  display: inline-block;
 }
 
 .loginForm {
   font-weight: bolder;
   float: right;
   margin-right: 20px;
+}
+
+.logoutForm {
+  float: right;
+  cursor: pointer;
+  color: aquamarine;
+  font-weight: 800;
 }
 
 .loginForm form{
@@ -30,6 +39,56 @@
 .header {
   width: 100%;
   position: relative;
+}
+
+.searchWrap {
+  width: 750px;
+  margin:0 auto;
+}
+
+.search {
+  width: 700px;
+  margin: 15px 5px;
+  background-color: #61dafb;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.searchEntry {
+  width: 400px;
+}
+
+.bodyWrap {
+  width: 900px;
+  margin: 0 auto;
+}
+
+.left {
+  width: 400px;
+  float: left;
+  background-color: antiquewhite;
+}
+
+.right {
+  width: 450px;
+  float: right;
+  background-color: antiquewhite;
+}
+
+.right h4 {
+  text-align: left;
+  padding-left: 15px;
+  margin: 10px 0;
+}
+
+.finances {
+  display: block;
+}
+
+.finances p {
+  margin: 5px;
+  text-align: left;
+  padding-left: 25px;
 }
 
 .App {

@@ -31,6 +31,7 @@ app.get('/news/:stock', (req, res) => {
     let stock = req.params.stock
     let start = req.query.start_dt
     let end = req.query.end_dt
+    console.log(stock, start, end)
     finnhubClient.companyNews(stock, start, end, (err, data, response) => {
         if (err) {
             res.status(500).json(err)
