@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import PortfolioItem from "./PortfolioItem";
 import WatchListItem from "./WatchlistItem";
 
-export default function Watchlist({username}) {
+export default function Watchlist({username, notify, setNotify}) {
     const [watchlist, setWatchList] = useState([])
 
     useEffect(() => {
@@ -12,6 +12,13 @@ export default function Watchlist({username}) {
             setWatchList([])
         }
     }, [username])
+
+    useEffect(() => {
+        if (notify === true) {
+            refresh()
+            setNotify(false)
+        }
+    }, [notify])
 
     const refresh = () => {
         fetch(`/watchlist/${username}`, {

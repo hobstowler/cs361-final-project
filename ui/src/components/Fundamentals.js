@@ -25,7 +25,7 @@ export default function Fundamentals({stock}) {
 
     return (
         <div className='finances'>
-            <h2>At a Glance...</h2>
+            <h2>{stock} At a Glance...</h2>
             {(Object.keys(fundamentals).length === 0) ? `I couldn't find anything about this company. Are you sure that's the right symbol?` : null}
             {(Object.keys(fundamentals).length > 0) ?
                 <p>52-week high ({fundamentals['52WeekHighDate']}): {convert(fundamentals['52WeekHigh'])}</p> : null}

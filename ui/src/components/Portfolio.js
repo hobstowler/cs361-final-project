@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import PortfolioItem from "./PortfolioItem";
 
-export default function Portfolio({username}) {
+export default function Portfolio({username, notify, setNotify}) {
     const [portfolio, setPortfolio] = useState([])
 
     useEffect(() => {
@@ -11,6 +11,13 @@ export default function Portfolio({username}) {
             setPortfolio([])
         }
     }, [username])
+
+    useEffect(() => {
+        if (notify === true) {
+            refresh()
+            setNotify(false)
+        }
+    }, [notify])
 
     const refresh = () => {
         fetch(`/portfolio/${username}`, {
