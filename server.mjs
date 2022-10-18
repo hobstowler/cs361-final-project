@@ -31,7 +31,7 @@ app.get('/news/:stock', (req, res) => {
     let stock = req.params.stock
     let start = req.query.start_dt
     let end = req.query.end_dt
-    console.log(stock, start, end)
+
     finnhubClient.companyNews(stock, start, end, (err, data, response) => {
         if (err) {
             res.status(500).json(err)
@@ -54,6 +54,10 @@ app.get('/quote/:symbol', (req, res) => {
     finnhubClient.quote(stock, (error, data, response) => {
         if (error) {
             return res.status(500).json(error)
+        }
+
+        if (data.c === 0) {
+            return res.status(404).json({})
         }
         return res.status(200).json(data)
     })
@@ -90,119 +94,85 @@ app.post('/login', (req, res) => {
 
 app.get('/portfolio/:username', (req, res) => {
     let username = req.params.username
-    console.log(username)
-    db.query(`SELECT id from users where username='${username}'`, (err, results) => {
+    db.query(`SELECT stock from portfolio where user_id=(SELECT id from users where username='${username}')`, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
         }
-        db.query(`SELECT stock from portfolio where user_id=${results[0].id}`, (err, results) => {
-            if (err) {
-                return res.status(500).json({'error': err})
-            }
-            return res.status(200).json(results)
-        })
+        return res.status(200).json(results)
     })
 })
 
 app.post('/portfolio/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
-    db.query(`SELECT id from users where username='${username}'`, (err, results) => {
+    db.query(`INSERT into portfolio (user_id, stock) values ((SELECT id from users where username='${username}'), '${stock}')`, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
+        } else {
+            return res.status(201).json({
+                "id": id,
+                "symbol": stock
+            })
         }
-        let id = results[0].id
-        db.query(`INSERT into portfolio (user_id, stock) values (${id}, '${stock}')`, (err, results) => {
-            if (err) {
-                return res.status(500).json({'error': err})
-            } else {
-                return res.status(201).json({
-                    "id": id,
-                    "symbol": stock
-                })
-            }
-        })
     })
 })
 
 app.delete('/portfolio/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
-    db.query(`SELECT id from users where username='${username}'`, (err, results) => {
-        if (err) {
-            return res.status(500).json({'error': err})
+    db.query(`SELECT * from portfolio where user_id=(SELECT id from users where username='${username}') and stock='${stock}'`, (err, results) => {
+        if (results.length === 0) {
+            return res.status(404).json({'error': "Stock not found or not associated with this user's portfolio."})
         }
-        let id = results[0].id
-        db.query(`SELECT * from portfolio where user_id=${id} and stock='${stock}'`, (err, results) => {
-            if (results.length === 0) {
-                return res.status(404).json({'error': "Stock not found or not associated with this user's portfolio."})
+        db.query(`DELETE from portfolio where user_id=${id} and stock='${stock}'`, (err, results) => {
+            if (err) {
+                return res.status(500).json({'error': err})
+            } else {
+                return res.status(204).json({"msg":"Success."})
             }
-            db.query(`DELETE from portfolio where user_id=${id} and stock='${stock}'`, (err, results) => {
-                if (err) {
-                    return res.status(500).json({'error': err})
-                } else {
-                    return res.status(204).json({"msg":"Success."})
-                }
-            })
         })
     })
 })
 
 app.get('/watchlist/:username', (req, res) => {
     let username = req.params.username
-    db.query(`SELECT id from users where username='${username}'`, (err, results) => {
+    db.query(`SELECT stock from watchlist where user_id=(SELECT id from users where username='${username}')`, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
         }
-        db.query(`SELECT stock from watchlist where user_id=${results[0].id}`, (err, results) => {
-            if (err) {
-                return res.status(500).json({'error': err})
-            }
-            return res.status(200).json(results)
-        })
+        return res.status(200).json(results)
     })
 })
 
 app.post('/watchlist/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
-    db.query(`SELECT id from users where username='${username}'`, (err, results) => {
+    console.log(username, stock)
+    db.query(`INSERT into watchlist (user_id, stock) values ((SELECT id from users where username='${username}'), '${stock}')`, (err, results) => {
         if (err) {
             return res.status(500).json({'error': err})
+        } else {
+            return res.status(201).json({
+                "id": id,
+                "symbol": stock
+            })
         }
-        let id = results[0].id
-        db.query(`INSERT into watchlist (user_id, stock) values (${id}, '${stock}')`, (err, results) => {
-            if (err) {
-                return res.status(500).json({'error': err})
-            } else {
-                return res.status(201).json({
-                    "id": id,
-                    "symbol": stock
-                })
-            }
-        })
     })
 })
 
 app.delete('/watchlist/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
-    db.query(`SELECT id from users where username='${username}'`, (err, results) => {
-        if (err) {
-            return res.status(500).json({'error': err})
+    db.query(`SELECT * from watchlist where user_id=(SELECT id from users where username='${username}') and stock='${stock}'`, (err, results) => {
+        if (results.length === 0) {
+            return res.status(404).json({'error': "Stock not found or not associated with this user's watchlist."})
         }
-        let id = results[0].id
-        db.query(`SELECT * from watchlist where user_id=${id} and stock='${stock}'`, (err, results) => {
-            if (results.length === 0) {
-                return res.status(404).json({'error': "Stock not found or not associated with this user's watchlist."})
+        db.query(`DELETE from watchlist where user_id=${id} and stock='${stock}'`, (err, results) => {
+            if (err) {
+                return res.status(500).json({'error': err})
+            } else {
+                return res.status(204).json({"msg":"Success."})
             }
-            db.query(`DELETE from watchlist where user_id=${id} and stock='${stock}'`, (err, results) => {
-                if (err) {
-                    return res.status(500).json({'error': err})
-                } else {
-                    return res.status(204).json({"msg":"Success."})
-                }
-            })
         })
     })
 })

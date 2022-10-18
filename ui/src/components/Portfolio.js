@@ -25,18 +25,18 @@ export default function Portfolio({username, notify, setNotify}) {
             headers: {'Content-Type': 'application/json'}
         })
         .then(async response => {
-                const hasJson = response.headers.get('content-type')?.includes('application/json')
-                const data = hasJson ? await response.json() : null
+            const hasJson = response.headers.get('content-type')?.includes('application/json')
+            const data = hasJson ? await response.json() : null
 
-                if (!response.ok) {
-                    let error = (data && data.error) || response.status
-                    return Promise.reject(error)
-                }
+            if (!response.ok) {
+                let error = (data && data.error) || response.status
+                return Promise.reject(error)
+            }
 
-                if (data !== null && data.length > 0) {
-                    setPortfolio(data)
-                }
-            })
+            if (data !== null && data.length > 0) {
+                setPortfolio(data)
+            }
+        })
     }
 
     const removeStock = (stock) => {
@@ -53,8 +53,9 @@ export default function Portfolio({username, notify, setNotify}) {
     return(
 
         <div>
-            <h2>Portfolio for {username}</h2>
-            {portfolio.map((stock, i) => <PortfolioItem stock={stock} removeStock={removeStock} key={i} />)}
+            <h2>Portfolio for {username ? username : 'a new user?'}</h2>
+            {username ? null : 'Sign in to get started. Once you do, all of the stocks from your watchlist will be displayed here.'}
+            {portfolio.map((stock, i) => <PortfolioItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
         </div>
     )
 }

@@ -1,12 +1,18 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
-export default function PortfolioItem({stock, removeStock}) {
+export default function PortfolioItem({stock, removeStock, notify}) {
     const [price, setPrice] = useState(0)
 
     useEffect(() => {
         refresh()
     }, [])
+
+    useEffect(() => {
+        if (notify) {
+            refresh()
+        }
+    }, [notify])
 
     const refresh = () => {
         fetch(`/quote/${stock.stock}`, {

@@ -23,7 +23,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header username={username} setUsername={setUsername} />
-        <Search />
+        <Search username={username} />
         <Routes>
           <Route path="/" element={<Home username={username} />}/>
           <Route path="/detail" element={<Detail username={username} />}/>

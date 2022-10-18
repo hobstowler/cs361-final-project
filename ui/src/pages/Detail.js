@@ -17,7 +17,7 @@ export default function Detail({username}) {
     }, [searchParams])
 
     const addStockToWatchlist = () => {
-        fetch(`/watchlist/${username}/${stock}`, {
+        fetch(`/watchlist/${username}/${stock.toUpperCase()}`, {
             method: 'POST'
         })
             .then(async response => {
@@ -33,7 +33,7 @@ export default function Detail({username}) {
     }
 
     const addStockToPortfolio = () => {
-        fetch(`/portfolio/${username}/${stock}`, {
+        fetch(`/portfolio/${username}/${stock.toUpperCase()}`, {
             method: 'POST'
         })
             .then(async response => {
@@ -54,7 +54,7 @@ export default function Detail({username}) {
                 <Watchlist username={username} notify={watchNotify} setNotify={setWatchNotify}/>
                 <Portfolio username={username} notify={portfolioNotify} setNotify={setPortfolioNotify}/>
             </div>
-            <div id='right'>
+            <div className='right'>
                 <div className='detailButtons'>
                     <button className='watchAdd' onClick={addStockToWatchlist}>Add to Watchlist</button>
                     <button className='portfolioAdd' onClick={addStockToPortfolio}>Add to Portfolio</button>

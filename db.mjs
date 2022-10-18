@@ -2,8 +2,8 @@ import mysql from "mysql";
 
 export const pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'us-cdbr-east-06.cleardb.net',
-    user: 'bdd317099a9c30',
-    password: 'd18a7670',
-    database: 'heroku_97690c0035aece8'
+    host: 'qvti2nukhfiig51b.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'rtwzvfmxgcyvjsxz',
+    password: 'kwaxyvtnu93mmw6n',
+    database: 'c3icobtpifsa6k4d'
 });

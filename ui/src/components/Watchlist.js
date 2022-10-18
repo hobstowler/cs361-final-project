@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import PortfolioItem from "./PortfolioItem";
 import WatchListItem from "./WatchlistItem";
 
 export default function Watchlist({username, notify, setNotify}) {
@@ -53,8 +52,9 @@ export default function Watchlist({username, notify, setNotify}) {
 
     return (
         <div>
-            <h2>Watch List for {username}</h2>
-            {watchlist.map((stock, i) => <WatchListItem stock={stock} removeStock={removeStock} key={i} />)}
+            <h2>Watch List for {username ? username : 'a new user?'}</h2>
+            {username ? null : 'Sign in to get started. Once you do, all of the stocks from your watchlist will be displayed here.'}
+            {watchlist.map((stock, i) => <WatchListItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
         </div>
     )
 }

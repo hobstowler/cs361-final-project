@@ -58,6 +58,13 @@
   width: 400px;
 }
 
+.searchInfo {
+  font-size: 11px;
+  width: 600px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
 .bodyWrap {
   width: 900px;
   margin: 0 auto;
