@@ -6,13 +6,14 @@ import bodyParser from "express";
 import {pool} from "./db.mjs";
 import path from "path";
 import finnhub from "finnhub";
+import http from "https"
 
 const api_key = finnhub.ApiClient.instance.authentications['api_key']
 api_key.apiKey = process.env.API
 const finnhubClient = new finnhub.DefaultApi()
 
 const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 4000
 const db = pool
 
 app.use(express.urlencoded({
@@ -184,13 +185,26 @@ app.get('/stock/simple/:symbol', (req, res) => {
 
 app.get('/quote/:symbol', (req, res) => {
     let stock = req.params.symbol
-    console.log(stock)
-    finnhubClient.quote(stock, (error, data, response) => {
+    http.get(`http://maxpreh.pythonanywhere.com/${stock.toUpperCase()}`, response => {
+        if (response.statusCode == 200) {
+            let rawData = ''
+            response.on('data', chunk => {
+                rawData += chunk
+            })
+            response.on('end', () => {
+                return res.status(200).json(rawData)
+            })
+        }
+        else {
+            return res.status(500).json({"error": "error"})
+        }
+    })
+    /*finnhubClient.quote(stock, (error, data, response) => {
         if (error) {
             return res.status(500).json(error)
         }
         return res.status(200).json(data)
-    })
+    })*/
 })
 
 app.get('/stock/detail/:symbol', (req, res) =>{
