@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="Heroku cs361">
-  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.39">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.40">
     <root id="1">
       <DefaultCasing>lower/lower</DefaultCasing>
       <DefaultEngine>InnoDB</DefaultEngine>
@@ -765,14 +765,12 @@ stock</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="231" parent="224" name="PRIMARY">
-      <ColNames>user_id
-stock</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
+      <UnderlyingIndexColNames>user_id
+stock</UnderlyingIndexColNames>
     </key>
     <key id="232" parent="224" name="portfolio_id">
-      <ColNames>user_id
-stock</ColNames>
       <UnderlyingIndexName>portfolio_id</UnderlyingIndexName>
     </key>
     <column id="233" parent="225" name="id">
@@ -797,12 +795,11 @@ stock</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="237" parent="225" name="PRIMARY">
-      <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
+      <UnderlyingIndexColNames>id</UnderlyingIndexColNames>
     </key>
     <key id="238" parent="225" name="user_id">
-      <ColNames>id</ColNames>
       <UnderlyingIndexName>user_id</UnderlyingIndexName>
     </key>
     <column id="239" parent="226" name="user_id">
@@ -828,14 +825,12 @@ stock</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="243" parent="226" name="PRIMARY">
-      <ColNames>user_id
-stock</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
+      <UnderlyingIndexColNames>user_id
+stock</UnderlyingIndexColNames>
     </key>
     <key id="244" parent="226" name="watchlist_id">
-      <ColNames>user_id
-stock</ColNames>
       <UnderlyingIndexName>watchlist_id</UnderlyingIndexName>
     </key>
   </database-model>
