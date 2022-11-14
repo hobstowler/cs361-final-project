@@ -51,11 +51,22 @@ export default function Portfolio({username, notify, setNotify}) {
     }
 
     return(
-
-        <div>
-            <h2>Portfolio for {username ? username : 'a new user?'}</h2>
+        <div className='portfolio'>
+            <h2>Portfolio</h2>
             {username ? null : 'Sign in to get started. Once you do, all of the stocks from your watchlist will be displayed here.'}
-            {portfolio.map((stock, i) => <PortfolioItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
+            <table cellPadding={0} cellSpacing={0}>
+                <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {portfolio.map((stock, i) => <PortfolioItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
+                </tbody>
+            </table>
         </div>
     )
 }

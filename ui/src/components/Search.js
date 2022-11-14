@@ -76,8 +76,8 @@ export default function Search({username}) {
                     <input className='searchEntry' type='text' value={searchTerm} onChange={handleChange} />
                     <input type='submit' value='Search by Symbol' />
                 </form>
-                <div>{(quickQuote && searchTerm) ? quickQuote : null}{(quickQuote !== '' && quickQuote !== 'Couldn\'t find that one. Try again.' && username) ?
-                    <div><button onClick={addStockToWatchlist}>Add to Watch</button><button onClick={addStockToPortfolio}>Add to Portfolio</button></div> : null}</div>
+                <div className='searchText'>{(quickQuote && searchTerm) ? quickQuote : null}{(quickQuote !== '' && quickQuote !== 'Couldn\'t find that one. Try again.' && username) ?
+                    <div><button className='portfolioAdd' onClick={addStockToPortfolio}>Add to Portfolio</button><button className='watchAdd' onClick={addStockToWatchlist}>Add to Watchlist</button></div> : null}</div>
             </div>
             <div className='searchInfo'>You can search for a stock by symbol above. Searching brings you to a detailed view of the stock and shows much more information about the company you're thinking about investing in to help you make an informed decision to invest.</div>
         </div>

@@ -1,12 +1,11 @@
 .headerWrapper {
   font-family: Calibri;
-  width: 800px;
+  width: 650px;
   margin: 0 auto;
   margin-top: 15px;
   display: block;
-  background-color: cornflowerblue;
+  background-color: yellow;
   padding: 20px;
-  border-radius: 10px;
 }
 
 .headerWrapper h1 {
@@ -28,7 +27,7 @@
 .logoutForm {
   float: right;
   cursor: pointer;
-  color: aquamarine;
+  color: red;
   font-weight: 800;
 }
 
@@ -42,16 +41,20 @@
 }
 
 .searchWrap {
-  width: 750px;
+  width: 700px;
   margin:0 auto;
 }
 
 .search {
-  width: 700px;
+  width: 670px;
   margin: 15px 5px;
-  background-color: #61dafb;
-  border-radius: 10px;
+  background-color: orange;
   padding: 10px;
+}
+
+.searchText {
+  font-weight: bolder;
+  margin: 4px 0px
 }
 
 .searchEntry {
@@ -61,31 +64,138 @@
 .searchInfo {
   font-size: 11px;
   width: 600px;
-  margin: 0 auto;
-  margin-bottom: 10px;
+  margin: 0 auto 10px;
 }
 
 .bodyWrap {
-  width: 900px;
+  width: 1300px;
   margin: 0 auto;
+  padding-top: 20px;
+  display: inline-block;
+}
+
+.bodyWrap > div {
+  display: inline-block;
+  vertical-align: top;
 }
 
 .left {
-  width: 400px;
-  float: left;
-  background-color: antiquewhite;
+  width: 290px;
+  border-right: 2px solid black;
+  padding-right: 8px;
+}
+
+.middle {
+  width: 700px
 }
 
 .right {
-  width: 450px;
-  float: right;
-  background-color: antiquewhite;
+  width: 290px;
+  border-left: 2px solid black;
+  padding-left: 8px;
 }
 
 .right h4 {
   text-align: left;
   padding-left: 15px;
   margin: 10px 0;
+}
+
+.detailButtons {
+  width: 690px;
+  height: 20px;
+  margin: 10px 10px 15px 0px;
+}
+
+.detailButtons button {
+  float: right;
+  font-weight: bolder;
+  color: white;
+}
+
+.watchList {
+  border-top: 20px solid blue;
+  border-left: 2px solid blue;
+  margin-bottom: 40px;
+}
+
+.watchList h2 {
+  margin-top: 5px;
+  margin-left: 5px;
+  text-align: left;
+}
+
+.watchAdd {
+  background-color: blue;
+  color: white;
+}
+
+.portfolio {
+  border-top: 20px solid green;
+  border-left: 2px solid green;
+}
+
+.portfolio h2 {
+  margin-top: 5px;
+  margin-left: 5px;
+  text-align: left;
+}
+
+.portfolioAdd {
+  background-color: green;
+  margin-right: 10px;
+  color: white;
+}
+
+table {
+  width: 100%;
+}
+
+table tr td:last-child {
+  padding: 3px 5px 2px 0px;
+  text-align: right;
+  color: blue;
+}
+
+table tr td:last-child a:visited {
+  color: blue;
+}
+
+table tr td:nth-last-child(2) {
+  border-left: 2px solid black;
+  padding: 3px 0px 2px 0px;
+  text-align: right;
+  cursor: pointer;
+  color: red;
+  font-weight: bolder;
+}
+
+table tr:nth-child(odd) {
+  background-color: lightgrey;
+}
+
+table tr th {
+  background-color: white;
+  border-bottom: 2px solid black;
+}
+
+table tr td a {
+  text-decoration: none;
+  font-weight: bolder;
+}
+
+.priceChart > div {
+  height: 300px !important;
+}
+
+.volumeChart > div {
+  height: 150px !important;
+}
+
+.yahooLink {
+  text-align: right;
+  margin-right: 10px;
+  font-weight: bolder;
 }
 
 .finances {

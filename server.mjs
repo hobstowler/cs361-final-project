@@ -63,6 +63,35 @@ app.get('/quote/:symbol', (req, res) => {
     })
 })
 
+app.get('/candles', (req, res) => {
+    let stock = req.query.symbol
+    let start_dt = req.query.start
+    let end_dt = req.query.end
+    let resolution = req.query.resolution
+    finnhubClient.stockCandles(stock, resolution, start_dt, end_dt, (error, data, response) => {
+        if (data === undefined || data === null || data.s === "no_data" || data.length === 0) {
+            return res.status(400).json({"Error": "No Data."})
+        }
+        let new_data = []
+        let volume_data = []
+        for (let i = 0; i < data.t.length; i++) {
+            let point = {}
+            let volume = {}
+            point.x = data.t[i]
+            volume.x = data.t[i]
+            volume.y = data.v[i]
+            point.y = []
+            point.y[0] = data.l[i]
+            point.y[1] = data.c[i]
+            point.y[2] = data.o[i]
+            point.y[3] = data.h[i]
+            new_data[i] = point
+            volume_data[i] = volume
+        }
+        return res.status(200).json([new_data, volume_data])
+    });
+})
+
 app.post('/register', (req, res) => {
     let username = req.body.username
     let password = req.body.password
@@ -124,7 +153,7 @@ app.delete('/portfolio/:username/:stock', (req, res) => {
         if (results.length === 0) {
             return res.status(404).json({'error': "Stock not found or not associated with this user's portfolio."})
         }
-        db.query(`DELETE from portfolio where user_id=${id} and stock='${stock}'`, (err, results) => {
+        db.query(`DELETE from portfolio where user_id=(SELECT id from users where username='${username}') and stock='${stock}'`, (err, results) => {
             if (err) {
                 return res.status(500).json({'error': err})
             } else {
@@ -152,10 +181,7 @@ app.post('/watchlist/:username/:stock', (req, res) => {
         if (err) {
             return res.status(500).json({'error': err})
         } else {
-            return res.status(201).json({
-                "id": id,
-                "symbol": stock
-            })
+            return res.status(204).json({'msg': "Success."})
         }
     })
 })
@@ -167,7 +193,7 @@ app.delete('/watchlist/:username/:stock', (req, res) => {
         if (results.length === 0) {
             return res.status(404).json({'error': "Stock not found or not associated with this user's watchlist."})
         }
-        db.query(`DELETE from watchlist where user_id=${id} and stock='${stock}'`, (err, results) => {
+        db.query(`DELETE from watchlist where user_id=(SELECT id from users where username='${username}') and stock='${stock}'`, (err, results) => {
             if (err) {
                 return res.status(500).json({'error': err})
             } else {

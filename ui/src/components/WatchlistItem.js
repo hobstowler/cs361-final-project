@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Link} from 'react-router-dom';
+import {BiTrash, BiArrowToRight } from 'react-icons/bi';
 
 export default function WatchListItem({stock, removeStock}) {
     const [price, setPrice] = useState(0)
@@ -36,11 +37,11 @@ export default function WatchListItem({stock, removeStock}) {
     }
 
     return (
-        <div className='stockItem'>
-            <span className='stockName'> {stock.stock}</span>
-            <span className='stockPrice'>{price.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</span>
-            <button className='stockRemove' onClick={remove}>Remove</button>
-            <Link className='stockToDetail' to={`/detail?stock=${stock.stock}`} >See Detail</Link>
-        </div>
+        <tr className='stockItem'>
+            <td className='stockName'> {stock.stock}</td>
+            <td className='stockPrice'>{price.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</td>
+            <td><div className='stockRemove' onClick={remove}><BiTrash /></div></td>
+            <td><Link className='stockToDetail' to={`/detail?stock=${stock.stock}`} ><BiArrowToRight /></Link></td>
+        </tr>
     )
 }

@@ -51,10 +51,22 @@ export default function Watchlist({username, notify, setNotify}) {
     }
 
     return (
-        <div>
-            <h2>Watch List for {username ? username : 'a new user?'}</h2>
+        <div className='watchList'>
+            <h2>Watchlist</h2>
             {username ? null : 'Sign in to get started. Once you do, all of the stocks from your watchlist will be displayed here.'}
-            {watchlist.map((stock, i) => <WatchListItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
+            <table cellPadding={0} cellSpacing={0}>
+                <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {watchlist.map((stock, i) => <WatchListItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
+                </tbody>
+            </table>
         </div>
     )
 }

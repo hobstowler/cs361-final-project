@@ -4,6 +4,7 @@ import Watchlist from "../components/Watchlist";
 import Portfolio from "../components/Portfolio";
 import Fundamentals from "../components/Fundamentals";
 import Stories from "../components/Stories";
+import Chart from "../components/Chart";
 
 export default function Detail({username}) {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -54,14 +55,17 @@ export default function Detail({username}) {
                 <Watchlist username={username} notify={watchNotify} setNotify={setWatchNotify}/>
                 <Portfolio username={username} notify={portfolioNotify} setNotify={setPortfolioNotify}/>
             </div>
-            <div className='right'>
+            <div className='middle'>
+                <Chart symbol={stock} />
                 <div className='detailButtons'>
                     <button className='watchAdd' onClick={addStockToWatchlist}>Add to Watchlist</button>
                     <button className='portfolioAdd' onClick={addStockToPortfolio}>Add to Portfolio</button>
                 </div>
+                <div className='yahooLink'>See it on <a href={`http://finance.yahoo.com/quote/${stock}`} target='_blank'>Yahoo Finance</a></div>
                 <Fundamentals stock={stock} />
-                <Stories stock={stock} />
             </div>
+            <div className='right'>
+                <Stories stock={stock} /></div>
         </div>
     )
 }

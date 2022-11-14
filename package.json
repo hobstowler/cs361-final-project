@@ -11,12 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "canvasjs": "^1.8.3",
+    "canvasjs-react-charts": "^1.0.5",
     "create-react-app": "^5.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "finnhub": "^1.2.16",
     "js-cookie": "^3.0.1",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "react-datepicker": "^4.8.0"
   }
 }
