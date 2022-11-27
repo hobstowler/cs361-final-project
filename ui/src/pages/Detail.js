@@ -1,9 +1,6 @@
 import {useSearchParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import Watchlist from "../components/Watchlist";
-import Portfolio from "../components/Portfolio";
+import {useEffect} from "react";
 import Fundamentals from "../components/Fundamentals";
-import Stories from "../components/Stories";
 import Chart from "../components/Chart";
 
 export default function Detail({stock, setStock, addStock}) {

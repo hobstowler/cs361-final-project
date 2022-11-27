@@ -25,27 +25,23 @@ export default function Chart({symbol}) {
         buildVolumeOptions()
     }, [volumeData])
 
-    // fetches candle data from back end endpoint
-    const getCandles = () => {
-        if (symbol === undefined || symbol === '') {
-            return
-        }
+    const buildCandleUrl = () => {
         let candleUrl = `/candles?symbol=${symbol}`
         candleUrl += `&resolution=${resolution}`
         candleUrl += `&start=${Math.floor(startDt.valueOf() / 1000)}`
         candleUrl += `&end=${Math.floor(endDt.valueOf() / 1000)}`
-        fetch(candleUrl, {
-            method: 'GET'
-        })
+        return candleUrl
+    }
+
+    // fetches candle data from back end endpoint
+    const getCandles = () => {
+        if (symbol === undefined || symbol === '') {return}
+        let candleUrl = buildCandleUrl()
+        fetch(candleUrl, {method: 'GET'})
             .then(async response => {
                 const hasJson = response.headers.get('content-type')?.includes('application/json')
                 const data = hasJson ? await response.json() : null
-
-                if (!response.ok) {
-                    let error = (data && data.error) || response.status
-                    return Promise.reject(error)
-                }
-
+                if (!response.ok) {return Promise.reject((data && data.error) || response.status)}
                 setSymbolData(formatData(data[0]))
                 setVolumeData(formatData(data[1]))
             })
@@ -68,20 +64,9 @@ export default function Chart({symbol}) {
         let newOptions = {
             theme: "light1",
             animationEnabled: true,
-            axisX: {
-                valueFormatString: "DD-MMM"
-            },
-            axisY: {
-                prefix: "$",
-                title: "Price (in USD)",
-                includeZero: false
-            },
-            data: [{
-                type: "candlestick",
-                yValueFormatString: "$###0.00",
-                xValueType: "dateTime",
-                dataPoints: symbolData
-            }]
+            axisX: {valueFormatString: "DD-MMM"},
+            axisY: {prefix: "$", title: "Price (in USD)", includeZero: false},
+            data: [{type: "candlestick", yValueFormatString: "$###0.00", xValueType: "dateTime", dataPoints: symbolData}]
         }
         setDataOptions(newOptions)
     }
@@ -91,19 +76,9 @@ export default function Chart({symbol}) {
         let newOptions = {
             theme: "light1", // "light1", "light2", "dark1", "dark2"
             animationEnabled: true,
-            axisX: {
-                valueFormatString: "DD-MMM"
-            },
-            axisY: {
-                title: "Volume (Thousands)",
-                includeZero: false
-            },
-            data: [{
-                type: "area",
-                yValueFormatString: "$###0.00",
-                xValueType: "dateTime",
-                dataPoints: volumeData
-            }]
+            axisX: {valueFormatString: "DD-MMM"},
+            axisY: {title: "Volume (Thousands)", includeZero: false},
+            data: [{type: "area", yValueFormatString: "$###0.00", xValueType: "dateTime", dataPoints: volumeData}]
         }
         setVolumeOptions(newOptions)
     }
