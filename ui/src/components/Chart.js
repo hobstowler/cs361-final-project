@@ -10,27 +10,31 @@ export default function Chart({symbol}) {
     const [endDt, setEndDt] = useState(new Date())
     const [resolution, setResolution] = useState("D")
 
-    useEffect(() => {
-        //console.log(startDt)
-        //startDt.setUTCSeconds(1590988249)
-        //endDt.setUTCSeconds(1591852249)
-        //console.log(startDt)
-    }, [])
-
+    // gets new candles whenever the symbol, dates, or resolution changes
     useEffect(() => {
         getCandles()
     }, [symbol, startDt, endDt, resolution])
 
+    // builds new options for graph when symbol data is refreshed
     useEffect(() => {
         buildOptions()
     }, [symbolData])
 
+    // builds new options for volume graph when volume data is refreshed
     useEffect(() => {
         buildVolumeOptions()
     }, [volumeData])
 
+    // fetches candle data from back end endpoint
     const getCandles = () => {
-        fetch(`/candles?symbol=${symbol}&resolution=${resolution}&start=${Math.floor(startDt.valueOf() / 1000)}&end=${Math.floor(endDt.valueOf() / 1000)}`, {
+        if (symbol === undefined || symbol === '') {
+            return
+        }
+        let candleUrl = `/candles?symbol=${symbol}`
+        candleUrl += `&resolution=${resolution}`
+        candleUrl += `&start=${Math.floor(startDt.valueOf() / 1000)}`
+        candleUrl += `&end=${Math.floor(endDt.valueOf() / 1000)}`
+        fetch(candleUrl, {
             method: 'GET'
         })
             .then(async response => {
@@ -41,38 +45,29 @@ export default function Chart({symbol}) {
                     let error = (data && data.error) || response.status
                     return Promise.reject(error)
                 }
-                let priceData = data[0]
-                let volumeData = data[1]
 
-                let dataPoints = []
-                for (let i = 0; i < priceData.length; i++) {
-                    dataPoints.push({
-                        x: new Date(priceData[i].x * 1000),
-                        y: priceData[i].y
-                    })
-                }
-                let volumeDataPoints = []
-                for (let i = 0; i < volumeData.length; i++) {
-                    volumeDataPoints.push({
-                        x: new Date(volumeData[i].x * 1000),
-                        y: volumeData[i].y / 1000
-                    })
-                }
-
-                setSymbolData(dataPoints)
-                setVolumeData(volumeDataPoints)
+                setSymbolData(formatData(data[0]))
+                setVolumeData(formatData(data[1]))
             })
     }
 
+    // formats data for consumption by canvasJS graph and corrects the timestamp (ms to s)
+    const formatData = (data) => {
+        let dataPoints = []
+        for (let i = 0; i < data.length; i++) {
+            dataPoints.push({
+                x: new Date(data[i].x * 1000),
+                y: data[i].y
+            })
+        }
+        return dataPoints
+    }
+
+    // builds graph options
     const buildOptions = () => {
         let newOptions = {
-            theme: "light1", // "light1", "light2", "dark1", "dark2"
+            theme: "light1",
             animationEnabled: true,
-            exportEnabled: true,
-            zoomEnabled: true,
-            title:{
-                text: `${symbol.toUpperCase()} Candle Chart`
-            },
             axisX: {
                 valueFormatString: "DD-MMM"
             },
@@ -91,15 +86,11 @@ export default function Chart({symbol}) {
         setDataOptions(newOptions)
     }
 
+    // builds options for volume graph
     const buildVolumeOptions = () => {
         let newOptions = {
             theme: "light1", // "light1", "light2", "dark1", "dark2"
             animationEnabled: true,
-            exportEnabled: true,
-            zoomEnabled: true,
-            title:{
-                text: `${symbol.toUpperCase()} Volume Chart`
-            },
             axisX: {
                 valueFormatString: "DD-MMM"
             },

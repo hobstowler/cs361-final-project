@@ -2,12 +2,16 @@ import {useEffect, useState} from "react";
 import {Link} from 'react-router-dom';
 import {BiTrash, BiArrowToRight } from 'react-icons/bi';
 
-export default function WatchListItem({stock, removeStock}) {
+export default function Stock({stock, removeStock, notify}) {
     const [price, setPrice] = useState(0)
 
     useEffect(() => {
         refresh()
     }, [])
+
+    useEffect(() => {
+        refresh()
+    }, [notify])
 
     const refresh = () => {
         fetch(`/quote/${stock.stock}`, {
@@ -30,10 +34,6 @@ export default function WatchListItem({stock, removeStock}) {
 
     const remove = () => {
         removeStock(stock.stock)
-    }
-
-    const detail = () => {
-
     }
 
     return (

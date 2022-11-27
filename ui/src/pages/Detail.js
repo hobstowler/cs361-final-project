@@ -6,66 +6,31 @@ import Fundamentals from "../components/Fundamentals";
 import Stories from "../components/Stories";
 import Chart from "../components/Chart";
 
-export default function Detail({username}) {
+export default function Detail({stock, setStock, addStock}) {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [stock, setStock] = useState(searchParams.get('stock'))
-    const [watchNotify, setWatchNotify] = useState(false)
-    const [portfolioNotify, setPortfolioNotify] = useState(false)
 
+    // update the stock in view when the search parameter changes
     useEffect(() => {
-        console.log('change detected')
-        setStock(searchParams.get('stock'))
+        let new_stock = searchParams.get('stock')
+        setStock(new_stock)
     }, [searchParams])
 
-    const addStockToWatchlist = () => {
-        fetch(`/watchlist/${username}/${stock.toUpperCase()}`, {
-            method: 'POST'
-        })
-            .then(async response => {
-                const hasJson = response.headers.get('content-type')?.includes('application/json')
-                const data = hasJson ? await response.json() : null
-
-                if (!response.ok) {
-                    let error = (data && data.error) || response.status
-                    return Promise.reject(error)
-                }
-                setWatchNotify(true)
-            })
-    }
-
-    const addStockToPortfolio = () => {
-        fetch(`/portfolio/${username}/${stock.toUpperCase()}`, {
-            method: 'POST'
-        })
-            .then(async response => {
-                const hasJson = response.headers.get('content-type')?.includes('application/json')
-                const data = hasJson ? await response.json() : null
-
-                if (!response.ok) {
-                    let error = (data && data.error) || response.status
-                    return Promise.reject(error)
-                }
-                setPortfolioNotify(true)
-            })
+    const add = (type) => {
+        addStock(type, stock)
     }
 
     return (
-        <div className='bodyWrap'>
-            <div className='left'>
-                <Watchlist username={username} notify={watchNotify} setNotify={setWatchNotify}/>
-                <Portfolio username={username} notify={portfolioNotify} setNotify={setPortfolioNotify}/>
+        <div className='middle'>
+            <h2>{stock.toUpperCase()} in the Charts</h2>
+            <Chart symbol={stock} />
+            <div className='detailButtons'>
+                <button className='watchAdd' onClick={() => add('watchlist')}>Add to Watchlist</button>
+                <button className='portfolioAdd' onClick={() => add('portfolio')}>Add to Portfolio</button>
             </div>
-            <div className='middle'>
-                <Chart symbol={stock} />
-                <div className='detailButtons'>
-                    <button className='watchAdd' onClick={addStockToWatchlist}>Add to Watchlist</button>
-                    <button className='portfolioAdd' onClick={addStockToPortfolio}>Add to Portfolio</button>
-                </div>
-                <div className='yahooLink'>See it on <a href={`http://finance.yahoo.com/quote/${stock}`} target='_blank'>Yahoo Finance</a></div>
-                <Fundamentals stock={stock} />
+            <div className='yahooLink'>See it on <a href={`http://finance.yahoo.com/quote/${stock}`} target='_blank'>
+                Yahoo Finance</a>
             </div>
-            <div className='right'>
-                <Stories stock={stock} /></div>
+            <Fundamentals stock={stock} />
         </div>
     )
 }

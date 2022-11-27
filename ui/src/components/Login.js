@@ -12,57 +12,67 @@ export default function Login({setUsername}) {
             return
         }
 
-        // TODO POST username/password to back end and get response
         if (register) {
-            fetch(`/register`, {
-                method: 'POST',
-                headers: {'content-type': 'application/json'},
-                body: JSON.stringify({
-                    'username': username,
-                    'password': password
-                })
-            })
-                .then(async response => {
-                    const hasJson = response.headers.get('content-type')?.includes('application/json')
-                    const data = hasJson ? await response.json() : null
-
-                    if (!response.ok) {
-                        let error = (data && data.error) || response.status
-                        return Promise.reject(error)
-                    }
-
-                    setUsername(username)
-                    Cookies.set('username', username)
-                })
+            registerUser()
         } else {
-            fetch('/login', {
-                method: 'POST',
-                headers: {'content-type': 'application/json'},
-                body: JSON.stringify({
-                    'username': username,
-                    'password': password
-                })
-            })
-                .then(async response => {
-                    const hasJson = response.headers.get('content-type')?.includes('application/json')
-                    const data = hasJson ? await response.json() : null
-
-                    if (!response.ok) {
-                        let error = (data && data.error) || response.status
-                        return Promise.reject(error)
-                    }
-
-                    setUsername(username)
-                    Cookies.set('username', username)
-                })
+            loginUser()
         }
     }
+
+    const loginUser = () => {
+        fetch('/login', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({
+                'username': username,
+                'password': password
+            })
+        })
+            .then(async response => {
+                const hasJson = response.headers.get('content-type')?.includes('application/json')
+                const data = hasJson ? await response.json() : null
+
+                if (!response.ok) {
+                    let error = (data && data.error) || response.status
+                    return Promise.reject(error)
+                }
+
+                setUsername(username)
+                Cookies.set('username', username)
+            })
+    }
+
+    const registerUser = () => {
+        fetch(`/register`, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({
+                'username': username,
+                'password': password
+            })
+        })
+            .then(async response => {
+                const hasJson = response.headers.get('content-type')?.includes('application/json')
+                const data = hasJson ? await response.json() : null
+
+                if (!response.ok) {
+                    let error = (data && data.error) || response.status
+                    return Promise.reject(error)
+                }
+
+                setUsername(username)
+                Cookies.set('username', username)
+            })
+    }
+
     const handleUsernameChange = (e) => {
         changeUsername(e.target.value)
     }
+
     const handlePasswordChange = (e) => {
         changePassword(e.target.value)
     }
+
     const handleRegisterChange = () => {
         setRegister(!register)
     }

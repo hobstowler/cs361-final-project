@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
     res.sendFile('./ui/build/index.html')
 })
 
+// get company news from finnhub for a given stock
 app.get('/news/:stock', (req, res) => {
     let stock = req.params.stock
     let start = req.query.start_dt
@@ -43,6 +44,7 @@ app.get('/news/:stock', (req, res) => {
     })
 })
 
+// gets company financial data from finnhub
 app.get('/financials/:stock', (req, res) => {
     let stock = req.params.stock
     finnhubClient.companyBasicFinancials(stock, "D", (error, data, response) => {
@@ -50,25 +52,13 @@ app.get('/financials/:stock', (req, res) => {
     })
 })
 
-app.get('/quote/:symbol', (req, res) => {
-    let stock = req.params.symbol
-    finnhubClient.quote(stock, (error, data, response) => {
-        if (error) {
-            return res.status(500).json(error)
-        }
-
-        if (data.c === 0) {
-            return res.status(404).json({})
-        }
-        return res.status(200).json(data)
-    })
-})
-
+// gets candle data for a given stock from finnhub
 app.get('/candles', (req, res) => {
     let stock = req.query.symbol
     let start_dt = req.query.start
     let end_dt = req.query.end
     let resolution = req.query.resolution
+
     finnhubClient.stockCandles(stock, resolution, start_dt, end_dt, (error, data, response) => {
         if (data === undefined || data === null || data.s === "no_data" || data.length === 0) {
             return res.status(400).json({"Error": "No Data."})
@@ -76,23 +66,20 @@ app.get('/candles', (req, res) => {
         let new_data = []
         let volume_data = []
         for (let i = 0; i < data.t.length; i++) {
-            let point = {}
-            let volume = {}
-            point.x = data.t[i]
-            volume.x = data.t[i]
-            volume.y = data.v[i]
-            point.y = []
-            point.y[0] = data.l[i]
-            point.y[1] = data.c[i]
-            point.y[2] = data.o[i]
-            point.y[3] = data.h[i]
-            new_data[i] = point
-            volume_data[i] = volume
+            new_data[i] = {
+                x: data.t[i],
+                y: [data.l[i], data.c[i], data.o[i], data.h[i]]
+            }
+            volume_data[i] = {
+                x: data.t[i],
+                y: data.v[i]
+            }
         }
         return res.status(200).json([new_data, volume_data])
     });
 })
 
+// registers a new user to the application
 app.post('/register', (req, res) => {
     let username = req.body.username
     let password = req.body.password
@@ -106,8 +93,8 @@ app.post('/register', (req, res) => {
     })
 })
 
+// logs a user into the application
 app.post('/login', (req, res) => {
-    console.log('logging')
     let username = req.body.username
     let password = req.body.password
     db.query(`SELECT username from users where username='${username}' and password='${password}'`, (err, results) => {
@@ -122,6 +109,7 @@ app.post('/login', (req, res) => {
     })
 })
 
+// gets all stocks in a user's portfolio from the db
 app.get('/portfolio/:username', (req, res) => {
     let username = req.params.username
     db.query(`SELECT stock from portfolio where user_id=(SELECT id from users where username='${username}')`, (err, results) => {
@@ -132,6 +120,7 @@ app.get('/portfolio/:username', (req, res) => {
     })
 })
 
+// creates an entry in a user's portfolio in the db
 app.post('/portfolio/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
@@ -140,13 +129,13 @@ app.post('/portfolio/:username/:stock', (req, res) => {
             return res.status(500).json({'error': err})
         } else {
             return res.status(201).json({
-                "id": id,
                 "symbol": stock
             })
         }
     })
 })
 
+// deletes a stock from a user's portfolio in the db
 app.delete('/portfolio/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
@@ -164,6 +153,7 @@ app.delete('/portfolio/:username/:stock', (req, res) => {
     })
 })
 
+// gets all stocks in a user's watchlist from the db.
 app.get('/watchlist/:username', (req, res) => {
     let username = req.params.username
     db.query(`SELECT stock from watchlist where user_id=(SELECT id from users where username='${username}')`, (err, results) => {
@@ -174,6 +164,7 @@ app.get('/watchlist/:username', (req, res) => {
     })
 })
 
+// adds a stock to a user's watchlist in the database
 app.post('/watchlist/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
@@ -187,6 +178,7 @@ app.post('/watchlist/:username/:stock', (req, res) => {
     })
 })
 
+// Deletes a stock from a user's watchlist in the database
 app.delete('/watchlist/:username/:stock', (req, res) => {
     let username = req.params.username
     let stock = req.params.stock
@@ -204,33 +196,28 @@ app.delete('/watchlist/:username/:stock', (req, res) => {
     })
 })
 
-app.get('/stock/simple/:symbol', (req, res) => {
-    let stock = req.params.symbol
-    // TODO stub out for partner
-})
-
+// gets the current price of a given symbol using partner's microservice endpoint
+// formats the response for the front end react code.
 app.get('/quote/:symbol', (req, res) => {
     let stock = req.params.symbol
-    http.get(`http://maxpreh.pythonanywhere.com/${stock.toUpperCase()}`, response => {
+    http.get(`https://maxpreh.pythonanywhere.com/${stock.toUpperCase()}`, response => {
+
         if (response.statusCode == 200) {
             let rawData = ''
             response.on('data', chunk => {
                 rawData += chunk
             })
             response.on('end', () => {
-                return res.status(200).json(rawData)
+                let jsonData = JSON.parse(rawData)
+                let data = {}
+                data.c = jsonData.market_price
+                return res.status(200).json(data)
             })
         }
         else {
             return res.status(500).json({"error": "error"})
         }
     })
-    /*finnhubClient.quote(stock, (error, data, response) => {
-        if (error) {
-            return res.status(500).json(error)
-        }
-        return res.status(200).json(data)
-    })*/
 })
 
 app.get('/stock/detail/:symbol', (req, res) =>{

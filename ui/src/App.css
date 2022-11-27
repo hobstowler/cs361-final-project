@@ -151,18 +151,31 @@ table {
   width: 100%;
 }
 
-table tr td:last-child {
+.finances table tr td:last-child {
   padding: 3px 5px 2px 0px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.finances table tr td:nth-last-child(2) {
+  text-align: right;
+  border-right: 2px solid black;
+  padding-right: 15px;
+  width: 350px;
+}
+
+:is(.portfolio, .watchList) table tr td:last-child {
   text-align: right;
   color: blue;
 }
 
-table tr td:last-child a:visited {
+:is(.portfolio, .watchList) table tr td:last-child a:visited {
   color: blue;
 }
 
-table tr td:nth-last-child(2) {
+:is(.portfolio, .watchList) table tr td:nth-last-child(2) {
   border-left: 2px solid black;
+  border-right: none;
   padding: 3px 0px 2px 0px;
   text-align: right;
   cursor: pointer;
@@ -170,16 +183,16 @@ table tr td:nth-last-child(2) {
   font-weight: bolder;
 }
 
-table tr:nth-child(odd) {
+:is(.portfolio, .watchList) table tr:nth-child(odd) {
   background-color: lightgrey;
 }
 
-table tr th {
+:is(.portfolio, .watchList) table tr th {
   background-color: white;
   border-bottom: 2px solid black;
 }
 
-table tr td a {
+:is(.portfolio, .watchList) table tr td a {
   text-decoration: none;
   font-weight: bolder;
 }

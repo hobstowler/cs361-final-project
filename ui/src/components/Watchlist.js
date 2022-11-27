@@ -1,23 +1,22 @@
 import {useEffect, useState} from "react";
-import WatchListItem from "./WatchlistItem";
+import Stock from "./Stock";
 
-export default function Watchlist({username, notify, setNotify}) {
+export default function Watchlist({username, notify, removeStock}) {
     const [watchlist, setWatchList] = useState([])
 
     useEffect(() => {
         if (username) {
-            refresh()
-        } else {
             setWatchList([])
         }
     }, [username])
 
     useEffect(() => {
-        if (notify === true) {
-            refresh()
-            setNotify(false)
-        }
+        setWatchList([])
     }, [notify])
+
+    useEffect(() => {
+        refresh()
+    }, [watchlist])
 
     const refresh = () => {
         fetch(`/watchlist/${username}`, {
@@ -39,21 +38,15 @@ export default function Watchlist({username, notify, setNotify}) {
         })
     }
 
-    const removeStock = (stock) => {
-        fetch(`/watchlist/${username}/${stock}`, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                if (response.status === 204) {
-                    refresh()
-                }
-            })
+    const remove = (stock) => {
+        removeStock('watchlist', stock)
     }
 
     return (
         <div className='watchList'>
             <h2>Watchlist</h2>
-            {username ? null : 'Sign in to get started. Once you do, all of the stocks from your watchlist will be displayed here.'}
+            {username ? null :
+                'Sign in to get started. Once you do, all of the stocks from your watchlist will be displayed here.'}
             <table cellPadding={0} cellSpacing={0}>
                 <thead>
                 <tr>
@@ -64,7 +57,10 @@ export default function Watchlist({username, notify, setNotify}) {
                 </tr>
                 </thead>
                 <tbody>
-                    {watchlist.map((stock, i) => <WatchListItem stock={stock} notify={notify} removeStock={removeStock} key={i} />)}
+                    {watchlist.map((stock, i) => <Stock stock={stock}
+                                                        notify={notify}
+                                                        removeStock={remove}
+                                                        key={i} />)}
                 </tbody>
             </table>
         </div>
