@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import Stock from "./Stock";
 
-export default function Portfolio({username, notify, removeStock}) {
+export default function Portfolio({username, notify, setNotify, removeStock}) {
     const [portfolio, setPortfolio] = useState([])
 
     useEffect(() => {
@@ -11,11 +11,16 @@ export default function Portfolio({username, notify, removeStock}) {
     }, [username])
 
     useEffect(() => {
-        setPortfolio([])
+        if (notify === true) {
+            setPortfolio([])
+            setNotify(false)
+        }
     }, [notify])
 
     useEffect(() => {
-        refresh()
+        if (portfolio.length === 0) {
+            refresh()
+        }
     }, [portfolio])
 
     const refresh = () => {

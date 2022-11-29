@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import Stock from "./Stock";
 
-export default function Watchlist({username, notify, removeStock}) {
+export default function Watchlist({username, notify, setNotify, removeStock}) {
     const [watchlist, setWatchList] = useState([])
 
     useEffect(() => {
@@ -11,11 +11,16 @@ export default function Watchlist({username, notify, removeStock}) {
     }, [username])
 
     useEffect(() => {
-        setWatchList([])
+        if (notify === true) {
+            setWatchList([])
+            setNotify(false)
+        }
     }, [notify])
 
     useEffect(() => {
-        refresh()
+        if (watchlist.length === 0) {
+            refresh()
+        }
     }, [watchlist])
 
     const refresh = () => {

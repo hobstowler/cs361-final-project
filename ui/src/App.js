@@ -74,9 +74,11 @@ function App() {
               <div className='left'>
                   <Watchlist username={username}
                              notify={watchNotify}
+                             setNotify={setWatchNotify}
                              removeStock={removeStock} />
                   <Portfolio username={username}
                              notify={portfolioNotify}
+                             setNotify={setPortfolioNotify}
                              removeStock={removeStock} />
               </div>
               <Routes>

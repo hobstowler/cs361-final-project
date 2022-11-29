@@ -86,6 +86,7 @@ app.post('/login', (req, res) => {
     let username = req.body.username, password = req.body.password
     db.query(`SELECT username from users where username='${username}' and password='${password}'`, (err, results) => {
         if (err) {
+            console.log(err)
             return res.status(500).json({'error': err})
         } else if (results.length > 0) {
             return res.status(201).json({
@@ -159,7 +160,7 @@ app.post('/watchlist/:username/:stock', (req, res) => {
 app.delete('/watchlist/:username/:stock', (req, res) => {
     let username = req.params.username, stock = req.params.stock
     db.query(`SELECT * from watchlist where user_id=(SELECT id from users where username='${username}') and stock='${stock}'`, (err, results) => {
-        if (results.length === 0) {
+        if (results === null || results.length === 0) {
             return res.status(404).json({'error': "Stock not found or not associated with this user's watchlist."})
         }
         db.query(`DELETE from watchlist where user_id=(SELECT id from users where username='${username}') and stock='${stock}'`, (err, results) => {

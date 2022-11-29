@@ -10,7 +10,9 @@ export default function Stock({stock, removeStock, notify}) {
     }, [])
 
     useEffect(() => {
-        refresh()
+        if (notify === true) {
+            refresh()
+        }
     }, [notify])
 
     const refresh = () => {

@@ -5,6 +5,7 @@ import 'dotenv/config'
 
 export const pool = mysql.createPool({
     connectionLimit: 10,
+    migrate: 'safe',
     host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
